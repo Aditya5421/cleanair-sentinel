@@ -1,55 +1,65 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export default function Navbar() {
-  return (
-    <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg shadow-md px-8 py-4">
 
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
+  const linkStyle = ({ isActive }) =>
+    `
+    px-4 py-2 rounded-xl font-semibold
+    transition-all duration-300
+    ${
+      isActive
+        ? "bg-green-600 text-white"
+        : "text-green-700 hover:bg-green-600 hover:text-white"
+    }
+    `;
+
+  return (
+    <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg shadow-md px-5 py-4">
+
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:justify-between md:items-center gap-4">
 
         {/* Logo */}
-        <Link
+        <NavLink
           to="/"
-          className="text-2xl font-extrabold text-green-700"
+          className="text-2xl font-extrabold text-green-700 whitespace-nowrap text-center md:text-left"
         >
           🌍 CleanAir Sentinel
-        </Link>
+        </NavLink>
 
 
         {/* Menu */}
-        <div className="flex items-center gap-8 font-semibold">
+        <div className="flex flex-wrap justify-center gap-2">
 
-
-          <Link
+          <NavLink
             to="/"
-            className="text-gray-700 hover:text-green-700 transition"
+            className={linkStyle}
           >
-            Home
-          </Link>
+            🏠 Home
+          </NavLink>
 
 
-          <Link
+          <NavLink
             to="/report"
-            className="text-gray-700 hover:text-green-700 transition"
+            className={linkStyle}
           >
             📷 Report
-          </Link>
+          </NavLink>
 
 
-          <Link
+          <NavLink
             to="/map"
-            className="text-gray-700 hover:text-green-700 transition"
+            className={linkStyle}
           >
             🗺️ Map
-          </Link>
+          </NavLink>
 
 
-          <Link
+          <NavLink
             to="/dashboard"
-            className="bg-green-600 text-white px-5 py-2 rounded-xl hover:bg-green-700 transition shadow"
+            className={linkStyle}
           >
             📊 Dashboard
-          </Link>
-
+          </NavLink>
 
         </div>
 
