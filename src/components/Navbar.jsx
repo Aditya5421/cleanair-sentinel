@@ -2,28 +2,57 @@ import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
-    <nav className="bg-green-700 text-white px-8 py-4 flex justify-between items-center relative z-50">
+    <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg shadow-md px-8 py-4">
 
-      <Link to="/" className="text-2xl font-bold">
-        🌍 CleanAir Sentinel
-      </Link>
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
 
-      <div className="flex gap-6">
-        <Link className="cursor-pointer hover:text-green-200" to="/">
-          Home
+        {/* Logo */}
+        <Link
+          to="/"
+          className="text-2xl font-extrabold text-green-700"
+        >
+          🌍 CleanAir Sentinel
         </Link>
 
-        <Link className="cursor-pointer hover:text-green-200" to="/report">
-          Report
-        </Link>
 
-        <Link className="cursor-pointer hover:text-green-200" to="/map">
-          Map
-        </Link>
+        {/* Menu */}
+        <div className="flex items-center gap-8 font-semibold">
 
-        <Link className="cursor-pointer hover:text-green-200" to="/dashboard">
-          Dashboard
-        </Link>
+
+          <Link
+            to="/"
+            className="text-gray-700 hover:text-green-700 transition"
+          >
+            Home
+          </Link>
+
+
+          <Link
+            to="/report"
+            className="text-gray-700 hover:text-green-700 transition"
+          >
+            📷 Report
+          </Link>
+
+
+          <Link
+            to="/map"
+            className="text-gray-700 hover:text-green-700 transition"
+          >
+            🗺️ Map
+          </Link>
+
+
+          <Link
+            to="/dashboard"
+            className="bg-green-600 text-white px-5 py-2 rounded-xl hover:bg-green-700 transition shadow"
+          >
+            📊 Dashboard
+          </Link>
+
+
+        </div>
+
       </div>
 
     </nav>

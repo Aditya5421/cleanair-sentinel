@@ -1,121 +1,164 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../config/firebase";
 
 export default function Hero() {
-
-  const [totalReports, setTotalReports] = useState(0);
-  const [highRisk, setHighRisk] = useState(0);
-  const [resolved, setResolved] = useState(0);
-
-
-  useEffect(() => {
-    async function fetchStats() {
-      const snapshot = await getDocs(collection(db, "reports"));
-
-      const reports = snapshot.docs.map((doc) => doc.data());
-
-      setTotalReports(reports.length);
-
-      setHighRisk(
-        reports.filter(
-          (report) => Number(report.severity) >= 70
-        ).length
-      );
-
-      setResolved(
-        reports.filter(
-          (report) => report.status === "Resolved"
-        ).length
-      );
-    }
-
-    fetchStats();
-  }, []);
-
-
   return (
-    <section className="text-center py-20 px-6 bg-gradient-to-br from-green-100 via-white to-blue-100">
+    <section className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
 
-      <h1 className="text-6xl font-extrabold text-green-700">
-        🌍 CleanAir Sentinel
-      </h1>
+      {/* Hero Section */}
+      <div className="max-w-7xl mx-auto px-8 py-20 grid md:grid-cols-2 gap-12 items-center">
 
+        <div>
 
-      <p className="mt-6 text-2xl text-gray-700 max-w-3xl mx-auto">
-        Empowering citizens to report pollution using AI and helping cities
-        become cleaner through real-time environmental monitoring.
-      </p>
-
-
-      <div className="mt-10 flex justify-center gap-4">
-
-        <Link
-          to="/report"
-          className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-lg"
-        >
-          📷 Report Pollution
-        </Link>
+          <h1 className="text-6xl font-extrabold leading-tight text-green-700">
+            🌍 CleanAir
+            <br />
+            Sentinel
+          </h1>
 
 
-        <Link
-          to="/map"
-          className="border-2 border-green-600 text-green-700 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-green-100"
-        >
-          🗺️ View Pollution Map
-        </Link>
+          <p className="mt-6 text-xl text-gray-700 leading-relaxed">
+            An AI-powered pollution monitoring platform that helps citizens
+            report environmental problems, analyze pollution using AI,
+            and track hotspots in real time.
+          </p>
+
+
+
+          <div className="mt-8 flex gap-5 flex-wrap">
+
+
+            <Link
+              to="/report"
+              className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-lg transition"
+            >
+              📷 Report Pollution
+            </Link>
+
+
+
+            <Link
+              to="/map"
+              className="border-2 border-green-600 text-green-700 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-green-100 transition"
+            >
+              🗺️ View Map
+            </Link>
+
+
+          </div>
+
+
+          <div className="mt-10 grid grid-cols-2 gap-4">
+
+
+            <div className="bg-white shadow-lg rounded-2xl p-5">
+              <h2 className="text-3xl font-bold text-green-700">
+                🤖 AI
+              </h2>
+              <p className="text-gray-600">
+                Smart pollution detection
+              </p>
+            </div>
+
+
+
+            <div className="bg-white shadow-lg rounded-2xl p-5">
+              <h2 className="text-3xl font-bold text-blue-700">
+                📍 GPS
+              </h2>
+              <p className="text-gray-600">
+                Location based reporting
+              </p>
+            </div>
+
+
+          </div>
+
+
+        </div>
+
+
+
+        {/* Right Illustration */}
+
+        <div className="relative">
+
+
+          <div className="bg-white rounded-3xl shadow-2xl p-8">
+
+            <img
+              src="/icons.svg"
+              alt="environment"
+              className="w-full h-72 object-contain"
+            />
+
+
+            <div className="mt-6 text-center">
+
+              <h2 className="text-3xl font-bold text-green-700">
+                Cleaner Cities
+              </h2>
+
+              <p className="text-gray-600 mt-2">
+                Powered by Artificial Intelligence
+              </p>
+
+            </div>
+
+
+          </div>
+
+
+
+        </div>
+
 
       </div>
 
 
 
-      <div className="mt-16 grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+      {/* Statistics */}
+
+      <div className="max-w-6xl mx-auto px-8 pb-16 grid md:grid-cols-4 gap-6">
 
 
-        <div className="bg-white rounded-2xl shadow-lg p-6">
-          <h2 className="text-3xl">
-            📷
+        <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
+          <h2 className="text-4xl font-bold text-green-700">
+            AI
           </h2>
+          <p className="text-gray-600 mt-2">
+            Pollution Analysis
+          </p>
+        </div>
 
-          <h3 className="font-bold mt-3">
-            Total Reports
-          </h3>
 
-          <p className="text-4xl text-green-600 mt-3">
-            {totalReports}
+        <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
+          <h2 className="text-4xl font-bold text-blue-700">
+            📍
+          </h2>
+          <p className="text-gray-600 mt-2">
+            Location Tracking
           </p>
         </div>
 
 
 
-        <div className="bg-white rounded-2xl shadow-lg p-6">
-          <h2 className="text-3xl">
+        <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
+          <h2 className="text-4xl font-bold text-red-600">
             🌫️
           </h2>
-
-          <h3 className="font-bold mt-3">
-            High Risk Zones
-          </h3>
-
-          <p className="text-4xl text-red-600 mt-3">
-            {highRisk}
+          <p className="text-gray-600 mt-2">
+            Pollution Detection
           </p>
         </div>
 
 
 
-        <div className="bg-white rounded-2xl shadow-lg p-6">
-          <h2 className="text-3xl">
-            ✅
+        <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
+          <h2 className="text-4xl font-bold text-green-700">
+            ♻️
           </h2>
-
-          <h3 className="font-bold mt-3">
-            Resolved Cases
-          </h3>
-
-          <p className="text-4xl text-blue-600 mt-3">
-            {resolved}
+          <p className="text-gray-600 mt-2">
+            Sustainable Future
           </p>
         </div>
 

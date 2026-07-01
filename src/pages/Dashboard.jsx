@@ -1,166 +1,256 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  updateDoc,
+  doc
+} from "firebase/firestore";
 import { db } from "../config/firebase";
 
+
 export default function Dashboard() {
-  const [reports, setReports] = useState([]);
 
-  async function fetchReports() {
-    try {
-      const snapshot = await getDocs(collection(db, "reports"));
+  const [reports,setReports] = useState([]);
 
-      const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
 
-      setReports(data);
-    } catch (error) {
-      console.error("Firebase error:", error);
-    }
+  async function loadReports(){
+
+    const snapshot = await getDocs(
+      collection(db,"reports")
+    );
+
+    const data = snapshot.docs.map(
+      (item)=>({
+        id:item.id,
+        ...item.data()
+      })
+    );
+
+    setReports(data);
+
   }
 
-  useEffect(() => {
-    fetchReports();
-  }, []);
 
-  async function markResolved(id) {
-    try {
-      await updateDoc(doc(db, "reports", id), {
-        status: "Resolved",
-      });
 
-      fetchReports();
-    } catch (error) {
-      console.error("Update error:", error);
-    }
+  useEffect(()=>{
+
+    loadReports();
+
+  },[]);
+
+
+
+  async function markResolved(id){
+
+    await updateDoc(
+      doc(db,"reports",id),
+      {
+        status:"resolved"
+      }
+    );
+
+
+    loadReports();
+
   }
 
-  const highRisk = reports.filter(
-    (report) => Number(report.severity) >= 70
-  ).length;
 
 
-  return (
-    <div className="min-h-screen bg-gray-100">
-      <Navbar />
-
-      <div className="max-w-6xl mx-auto p-8">
-
-        <h1 className="text-4xl font-bold text-green-700 mb-8">
-          📊 Dashboard
-        </h1>
+  const activeReports =
+    reports.filter(
+      (r)=>r.status !== "resolved"
+    );
 
 
-        <div className="grid md:grid-cols-3 gap-6">
-
-          <div className="bg-white p-6 rounded-2xl shadow-lg">
-            <h2 className="text-xl font-bold">
-              📷 Total Reports
-            </h2>
-
-            <p className="text-4xl mt-4 text-green-600">
-              {reports.length}
-            </p>
-          </div>
-
-
-          <div className="bg-white p-6 rounded-2xl shadow-lg">
-            <h2 className="text-xl font-bold">
-              🌫️ High Risk Reports
-            </h2>
-
-            <p className="text-4xl mt-4 text-red-600">
-              {highRisk}
-            </p>
-          </div>
-
-
-          <div className="bg-white p-6 rounded-2xl shadow-lg">
-            <h2 className="text-xl font-bold">
-              ✅ System Status
-            </h2>
-
-            <p className="text-4xl mt-4 text-blue-600">
-              Active
-            </p>
-          </div>
-
-        </div>
+  const resolvedReports =
+    reports.filter(
+      (r)=>r.status === "resolved"
+    );
 
 
 
-        <div className="bg-white mt-10 p-8 rounded-2xl shadow-lg">
-
-          <h2 className="text-2xl font-bold mb-6">
-            🌍 Pollution Reports
-          </h2>
-
-
-          {reports.length === 0 ? (
-            <p>No reports found.</p>
-          ) : (
-
-            reports.map((report) => (
-
-              <div
-                key={report.id}
-                className="border p-5 rounded-xl mb-5"
-              >
-
-                <p>
-                  <b>Type:</b> {report.pollutionType}
-                </p>
+  const highRisk =
+    activeReports.filter(
+      (r)=>Number(r.severity)>=70
+    ).length;
 
 
-                <p>
-                  <b>Severity:</b> {report.severity}%
-                </p>
+  const mediumRisk =
+    activeReports.filter(
+      (r)=>
+      Number(r.severity)>=40 &&
+      Number(r.severity)<70
+    ).length;
 
 
-                <p>
-                  <b>Health Risk:</b> {report.healthRisk}
-                </p>
+  const lowRisk =
+    activeReports.filter(
+      (r)=>Number(r.severity)<40
+    ).length;
 
 
-                <p>
-                  <b>Recommendation:</b> {report.recommendation}
-                </p>
+
+return (
+
+<div className="min-h-screen bg-gray-50">
+
+<Navbar/>
 
 
-                <p>
-                  <b>Status:</b>{" "}
-                  <span
-                    className={
-                      report.status === "Resolved"
-                        ? "text-green-600 font-bold"
-                        : "text-yellow-600 font-bold"
-                    }
-                  >
-                    {report.status || "Pending"}
-                  </span>
-                </p>
+<div className="max-w-6xl mx-auto p-8">
 
 
-                {report.status !== "Resolved" && (
-                  <button
-                    onClick={() => markResolved(report.id)}
-                    className="mt-4 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg"
-                  >
-                    ✅ Mark as Resolved
-                  </button>
-                )}
+<h1 className="text-4xl font-bold text-green-700">
+📊 Pollution Dashboard
+</h1>
 
-              </div>
 
-            ))
+<p className="text-gray-600 mt-2 mb-8">
+Track active and resolved pollution complaints
+</p>
 
-          )}
 
-        </div>
 
-      </div>
-    </div>
-  );
+
+<div className="grid md:grid-cols-5 gap-5">
+
+
+<div className="bg-white p-5 rounded-xl shadow">
+<h2 className="font-bold">
+Total Reports
+</h2>
+<p className="text-3xl font-bold text-green-700">
+{reports.length}
+</p>
+</div>
+
+
+
+<div className="bg-white p-5 rounded-xl shadow">
+<h2 className="font-bold">
+🔴 High Risk
+</h2>
+<p className="text-3xl font-bold text-red-600">
+{highRisk}
+</p>
+</div>
+
+
+
+<div className="bg-white p-5 rounded-xl shadow">
+<h2 className="font-bold">
+🟡 Medium Risk
+</h2>
+<p className="text-3xl font-bold text-yellow-500">
+{mediumRisk}
+</p>
+</div>
+
+
+
+<div className="bg-white p-5 rounded-xl shadow">
+<h2 className="font-bold">
+🟢 Low Risk
+</h2>
+<p className="text-3xl font-bold text-green-600">
+{lowRisk}
+</p>
+</div>
+
+
+
+<div className="bg-white p-5 rounded-xl shadow">
+<h2 className="font-bold">
+✅ Resolved
+</h2>
+<p className="text-3xl font-bold text-blue-600">
+{resolvedReports.length}
+</p>
+</div>
+
+
+
+</div>
+
+
+
+
+
+<div className="mt-10 bg-white rounded-xl shadow p-6">
+
+
+<h2 className="text-2xl font-bold mb-5">
+Active Reports
+</h2>
+
+
+
+{
+activeReports.map((report)=>(
+
+
+<div
+key={report.id}
+className="border rounded-xl p-5 mb-4"
+>
+
+
+<h3 className="text-xl font-bold">
+🚨 {report.pollutionType}
+</h3>
+
+
+<p>
+<b>Severity:</b> {report.severity}%
+</p>
+
+
+<p>
+<b>Health Risk:</b> {report.healthRisk}
+</p>
+
+
+<p>
+<b>Recommendation:</b> {report.recommendation}
+</p>
+
+
+
+<button
+
+onClick={()=>markResolved(report.id)}
+
+className="mt-4 bg-green-600 text-white px-5 py-2 rounded-lg font-bold"
+
+>
+
+Mark as Resolved
+
+</button>
+
+
+
+</div>
+
+
+))
+
+}
+
+
+
+</div>
+
+
+
+
+
+</div>
+
+</div>
+
+);
+
+
 }
