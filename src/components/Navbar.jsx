@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export default function Navbar() {
 
   const linkStyle =
-    "px-4 py-2 rounded-xl font-semibold text-green-700 hover:bg-green-600 hover:text-white transition-all duration-300";
+    "px-4 py-2 rounded-xl font-semibold text-green-700 hover:bg-green-600 hover:text-white active:bg-green-600 active:text-white transition-all duration-300";
 
   return (
     <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg shadow-md px-5 py-4">
@@ -19,7 +19,7 @@ export default function Navbar() {
         </Link>
 
 
-        {/* Menu */}
+        {/* Navigation Buttons */}
         <div className="flex flex-wrap justify-center gap-2">
 
           <Link
