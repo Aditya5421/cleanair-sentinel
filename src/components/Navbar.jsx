@@ -1,17 +1,9 @@
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
 
-  const linkStyle = ({ isActive }) =>
-    `
-    px-4 py-2 rounded-xl font-semibold
-    transition-all duration-300
-    ${
-      isActive
-        ? "bg-green-600 text-white"
-        : "text-green-700 hover:bg-green-600 hover:text-white"
-    }
-    `;
+  const linkStyle =
+    "px-4 py-2 rounded-xl font-semibold text-green-700 hover:bg-green-600 hover:text-white transition-all duration-300";
 
   return (
     <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg shadow-md px-5 py-4">
@@ -19,47 +11,47 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:justify-between md:items-center gap-4">
 
         {/* Logo */}
-        <NavLink
+        <Link
           to="/"
           className="text-2xl font-extrabold text-green-700 whitespace-nowrap text-center md:text-left"
         >
           🌍 CleanAir Sentinel
-        </NavLink>
+        </Link>
 
 
         {/* Menu */}
         <div className="flex flex-wrap justify-center gap-2">
 
-          <NavLink
+          <Link
             to="/"
             className={linkStyle}
           >
             🏠 Home
-          </NavLink>
+          </Link>
 
 
-          <NavLink
+          <Link
             to="/report"
             className={linkStyle}
           >
             📷 Report
-          </NavLink>
+          </Link>
 
 
-          <NavLink
+          <Link
             to="/map"
             className={linkStyle}
           >
             🗺️ Map
-          </NavLink>
+          </Link>
 
 
-          <NavLink
+          <Link
             to="/dashboard"
             className={linkStyle}
           >
             📊 Dashboard
-          </NavLink>
+          </Link>
 
         </div>
 
